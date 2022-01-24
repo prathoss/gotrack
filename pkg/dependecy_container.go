@@ -12,7 +12,8 @@ func NewDependencyContainer(cfg AppConfig) (DependencyContainer, error) {
 	}
 
 	return DependencyContainer{
-		Db: dbConn,
+		Db:     dbConn,
+		Config: cfg,
 	}, nil
 }
 
