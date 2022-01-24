@@ -2,3 +2,4 @@ tmp
 build
 dev_files
 .env
+.env.*
