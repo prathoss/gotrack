@@ -5,20 +5,24 @@ import (
 	"os/signal"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"gotrack/pkg"
 )
 
 func Run(dc pkg.DependencyContainer) error {
-	server := fiber.New()
+	server := fiber.New(
+		fiber.Config{
+			ErrorHandler: errorMiddleware,
+		},
+	)
+	server.Use(recover.New())
 
 	quitChan := make(chan os.Signal, 1)
 	signal.Notify(quitChan, os.Interrupt)
 	go func() {
 		<-quitChan
 		_ = server.Shutdown()
+		_ = dc.Close()
 	}()
-	if err := server.Listen(dc.Config.Server.GetAddress()); err != nil {
-		return err
-	}
-	return nil
+	return server.Listen(dc.Config.Server.GetAddress())
 }

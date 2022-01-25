@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"gotrack/pkg"
+	"gotrack/pkg/applogger"
 	"gotrack/server"
 )
 
@@ -15,6 +17,9 @@ var serverCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+
+		dev := viper.GetBool("dev")
+		applogger.Init(dev)
 
 		dc, err := pkg.NewDependencyContainer(config)
 		if err != nil {

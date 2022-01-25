@@ -3,6 +3,7 @@ package pkg
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gotrack/pkg/applogger"
 )
 
 func NewDependencyContainer(cfg AppConfig) (DependencyContainer, error) {
@@ -23,5 +24,6 @@ type DependencyContainer struct {
 }
 
 func (d *DependencyContainer) Close() error {
+	_ = applogger.Close()
 	return nil
 }
